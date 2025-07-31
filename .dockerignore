@@ -1,0 +1,6 @@
+.gitignore
+LICENSE
+*md
+/exemplos_teoricos
+*pdf
+api-merchion.postman_collection.json
