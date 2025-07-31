@@ -1,0 +1,96 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # Serviço do Backend (Laravel + PHP)
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: desafio-backend-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./backend:/var/www
+    command: >
+      sh -c "
+        echo 'Aguardando o banco de dados...' &&
+        while ! nc -z db 3306; do
+          sleep 1;
+        done &&
+        echo 'Banco de dados pronto.' &&
+
+        if [ ! -f .env ]; then
+          echo 'Copiando .env.example para .env...'
+          cp .env.example .env;
+        fi &&
+
+        composer install --no-interaction --no-progress --prefer-dist &&
+
+        if [ -z \"$(grep ^APP_KEY= .env | cut -d '=' -f2-)\" ]; then
+          echo 'Gerando APP_KEY...'
+          php artisan key:generate;
+        fi &&
+
+        echo 'Rodando as migrations...' &&
+        php artisan migrate --force &&
+
+        echo 'Rodando os testes...' &&
+        php artisan test &&
+
+        echo 'Testes concluídos com sucesso. Iniciando PHP-FPM...' &&
+        php-fpm
+      "
+    depends_on:
+      - db
+    networks:
+      - desafio-net
+
+  # Serviço do Servidor Web (Nginx)
+  nginx:
+    image: nginx:alpine
+    container_name: desafio-backend-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80" # Expõe a API na porta 8000
+    volumes:
+      - ./backend:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - desafio-net
+
+  # Serviço do Banco de Dados (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: desafio-backend-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    volumes:
+      - ./docker/dbdata:/var/lib/mysql
+    ports:
+      - "33061:3306" # Expõe o MySQL na porta 33061 (evita conflito local)
+    networks:
+      - desafio-net
+
+# Serviço do Frontend (Nuxt.js)
+# frontend:
+#   build:
+#     context: ./frontend
+#     dockerfile: Dockerfile
+#   container_name: desafio-frontend
+#   restart: unless-stopped
+#   ports:
+#     - "3000:3000" # Expõe o Nuxt na porta 3000
+#   volumes:
+#     - ./frontend:/app
+#     - /app/node_modules # Evita que o node_modules local sobrescreva o do container
+#   networks:
+#     - desafio-net
+
+networks:
+  desafio-net:
+    driver: bridge
