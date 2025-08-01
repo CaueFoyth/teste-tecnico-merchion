@@ -11,9 +11,6 @@ services:
     working_dir: /var/www/
     volumes:
       - ./backend:/var/www
-      - ./.env.local:/var/www/.env
-    env_file:
-      - .env.local
     command: >
       sh -c "
         echo 'Aguardando o banco de dados...' &&
@@ -28,8 +25,6 @@ services:
         fi &&
 
         composer install --no-interaction --no-progress --prefer-dist &&
-
-        php artisan config:cache &&
 
         if [ -z \"$(grep ^APP_KEY= .env | cut -d '=' -f2-)\" ]; then
           echo 'Gerando APP_KEY...'

@@ -49,7 +49,7 @@ Ajuste as variáveis no arquivo `.env.local` conforme necessário para o seu amb
 Este comando irá construir e iniciar os contêineres usando o arquivo `docker-compose.dev.yml` padrão.
 
 ```bash
-docker compose -f docker-compose.dev.yml up --build
+docker compose --env-file .env.local -f docker-compose.dev.yml up --build
 ```
 
 ### 3. Acessando a Aplicação
@@ -73,10 +73,10 @@ cp .env.example .env
 
 ### 2. Inicie os Contêineres
 
-Este comando irá construir e iniciar os contêineres usando o arquivo `docker-compose.dev.yml` padrão.
+Este comando irá construir e iniciar os contêineres usando o arquivo `docker-compose.prod.yml` padrão.
 
 ```bash
-docker compose -f docker-compose.prod.yml up -d --build
+docker compose --env-file .env -f docker-compose.prod.yml up --build
 ```
 
 ### 3. Acessando a Aplicação
@@ -187,16 +187,6 @@ o pipeline realiza os seguintes passos automaticamente:
 6. **Roda os testes automatizados**.
 
 > ⚠️ **Importante:** Se algum teste falhar, o serviço **não será iniciado**, garantindo que o ambiente não seja executado com erros.
-
-### 🧾 Execução Manual
-
-Você também pode rodar os testes manualmente a qualquer momento com o comando:
-
-```bash
-docker compose exec app php artisan test
-```
-
-Isso é útil durante o desenvolvimento, para validar funcionalidades específicas antes de subir alterações.
 
 ---
 
