@@ -1,0 +1,21 @@
+{
+  "name": "desafio-frontend",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "dev": "nuxt dev --host 0.0.0.0",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^1.0.0",
+    "nuxt": "^3.8.4",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@nuxtjs/tailwindcss": "^6.8.4",
+    "@vueuse/nuxt": "^10.5.0"
+  }
+}

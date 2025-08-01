@@ -1,19 +1,32 @@
-# frontend/Dockerfile
-FROM node:18-alpine
-
+# Estágio Base: instala dependências comuns
+FROM node:20-alpine AS base
 WORKDIR /app
-
-# Copia package.json e lock file
 COPY package*.json ./
 
-# Instala as dependências
+# Estágio de Desenvolvimento (igual ao seu original)
+FROM base AS dev
 RUN npm install
-
-# Copia o resto do código da aplicação
 COPY . .
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
 
-# Expõe a porta do Nuxt
+
+# Estágio de Build: Gera os arquivos finais da aplicação
+FROM base AS build
+RUN npm install
+COPY . .
+RUN npm run build
+
+
+# Estágio de Produção (CORRIGIDO PARA NUXT.JS)
+FROM base AS prod
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --production
+
+COPY --from=build /app/.output ./.output
+
 EXPOSE 3000
 
-# Comando para iniciar o servidor de desenvolvimento
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

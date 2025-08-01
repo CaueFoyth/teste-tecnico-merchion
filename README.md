@@ -8,6 +8,7 @@ O projeto foi estruturado seguindo as melhores práticas de desenvolvimento de s
 ## 🛠️ Tecnologias Utilizadas
 
 * ⚙️ **Backend**: PHP 8.3+ / Laravel 12
+* 📱 **Frontend**: TypeScript / Nuxt
 * 🗄️ **Banco de Dados**: MySQL 8+
 * 🐳 **Ambiente de Desenvolvimento**: Docker / Docker Compose
 
@@ -30,41 +31,57 @@ Para executar este projeto localmente, siga os passos abaixo.
 git clone https://github.com/CaueFoyth/teste-tecnico-merchion.git
 cd teste-tecnico-merchion
 ```
+### 🛠️ Ambiente de Desenvolvimentos
 
-**Configure as variáveis de ambiente**:
-Copie o arquivo de exemplo `.env.example` para criar seu próprio arquivo de configuração `.env`.
+Este ambiente é ideal para codificar, pois inclui hot-reloading, que atualiza a aplicação automaticamente conforme você altera o código.
+
+### 1. Configure as Variáveis de Ambiente (DEV)
+
+Copie o arquivo de exemplo para criar seu arquivo de configuração de desenvolvimento. O Docker Compose usará o arquivo .`env.local` por padrão neste ambiente.
+
+```bash
+cp .env.example .env.local
+```
+Ajuste as variáveis no arquivo `.env.local` conforme necessário para o seu ambiente local.
+
+### 2. Inicie os Contêineres
+
+Este comando irá construir e iniciar os contêineres usando o arquivo `docker-compose.dev.yml` padrão.
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+### 3. Acessando a Aplicação
+- **Frontend (Nuxt.js)**: http://localhost:3000
+- **Backend (API Laravel)**: http://localhost:8000
+
+---
+
+### 📦 Ambiente de Produção
+
+Este ambiente simula uma implantação real. Ele constrói imagens otimizadas, menores e mais seguras, sem as dependências de desenvolvimento e sem hot-reloading.
+
+### 1. Configure as Variáveis de Ambiente (PROD)
+
+Crie um arquivo de configuração específico para produção.
 
 ```bash
 cp .env.example .env
 ```
+**Importante**: Altere as variáveis no .env. para valores de produção (senhas fortes, URLs de domínio e etc.).
 
-**Inicie os contêineres Docker**:
-Este comando irá construir e iniciar os contêineres da aplicação PHP, a aplicação web em Nuxt, do servidor web Nginx e do banco de dados MySQL.
+### 2. Inicie os Contêineres
+
+Este comando irá construir e iniciar os contêineres usando o arquivo `docker-compose.dev.yml` padrão.
 
 ```bash
-docker compose up -d --build
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
-<!-- **Instale as dependências do Composer**:
-
-```bash
-docker-compose exec app composer install
-```
-
-**Gere a chave da aplicação**:
-
-```bash
-docker-compose exec app php artisan key:generate
-```
-
-**Execute as migrations do banco de dados**:
-Este comando criará as tabelas `users`, `sessions`, etc., no banco de dados.
-
-```bash
-docker-compose exec app php artisan migrate
-``` -->
-
-📡 A API estará disponível em [http://localhost:8000](http://localhost:8000) (ou na porta que você configurou).
+### 3. Acessando a Aplicação
+- **Frontend (Nuxt.js)**: http://localhost:3000
+- **Backend (API Laravel)**: http://localhost:8000
 
 ---
 
@@ -150,7 +167,7 @@ Para facilitar os testes dos endpoints, está disponibilizado uma coleção do P
 
 ## 🧪 Testes Automatizados
 
-Garantimos a qualidade do código por meio de uma pipeline de testes automatizados, que valida as funcionalidades críticas da aplicação, como registro e login.
+Garantia de qualidade do código por meio de uma pipeline de testes automatizados, que valida as funcionalidades críticas da aplicação, como registro e login.
 
 ### 🔁 Execução Automática
 
@@ -183,7 +200,7 @@ Isso é útil durante o desenvolvimento, para validar funcionalidades específic
 
 ---
 
-## 🧱 Decisões Arquiteturais
+## 🧱 Decisões Arquiteturais no Backend
 
 A arquitetura deste projeto foi pensada para criar uma base de código limpa, segura e fácil de manter, especialmente para uma API.
 
@@ -235,3 +252,23 @@ Decisão: O arquivo `config/cors.php` foi configurado para permitir origens espe
 
 Justificativa:
 Permitir o envio de **cookies** entre domínios é essencial para autenticação baseada em sessão.
+
+## 📱 Frontend
+
+### 🧱 Arquitetura Nuxt Escolhida
+
+- SPA Mode - Ideal para autenticação e áreas protegidas
+- Client-side rendering - Máxima interatividade
+- Composables - Lógica reutilizável e bem organizada
+
+### 📁 Estrutura Implementada:
+- `/composables`: Lógica centralizada de auth
+- `/middlewares`: Proteção de rotas e redirecionamento de usuários logados
+- `/types`: Tipagem do User completa
+
+### 📱 Páginas Implementadas
+- `/` Página inicial com navegação
+- `/register ` Formulário de cadastro
+- `/register-success` Confirmação de cadastro
+- `/login` Formulário de login
+- `/dashboard` Área do usuário logado
