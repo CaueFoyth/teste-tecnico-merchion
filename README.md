@@ -53,8 +53,8 @@ docker compose --env-file .env.local -f docker-compose.dev.yml up --build
 ```
 
 ### 3. Acessando a Aplicação
-- **Frontend (Nuxt.js)**: http://localhost:3000
-- **Backend (API Laravel)**: http://localhost:8000
+- **Frontend (Nuxt.js)**: http://localhost:3030
+- **Backend (API Laravel)**: http://localhost:5252
 
 ---
 
@@ -80,8 +80,8 @@ docker compose --env-file .env -f docker-compose.prod.yml up --build
 ```
 
 ### 3. Acessando a Aplicação
-- **Frontend (Nuxt.js)**: http://localhost:3000
-- **Backend (API Laravel)**: http://localhost:8000
+- **Frontend (Nuxt.js)**: http://localhost:3030
+- **Backend (API Laravel)**: http://localhost:5252
 
 ---
 
@@ -89,7 +89,7 @@ docker compose --env-file .env -f docker-compose.prod.yml up --build
 
 A API possui uma documentação interativa gerada com Swagger (OpenAPI), que permite visualizar e testar todos os endpoints diretamente pelo navegador.
 
-Acesse a documentação em: http://localhost:8000/api/documentation
+Acesse a documentação em: http://localhost:5252/api/documentation
 
 ## 🤖 Testando com o Postman
 
@@ -99,7 +99,7 @@ Para facilitar os testes dos endpoints, está disponibilizado uma coleção do P
 2. **Importe no Postman**:
     - Abra o Postman e vá a `File > Import...`
     - Selecione o ficheiro `api-merchion.postman_collection.json.`
-3. Utilize: Uma nova coleção chamada "API Teste Técnico Merchion" aparecerá. Ela já contém as requisições para "Registrar Novo Usuário" e "Login de Usuário" pré-configuradas. A variável `{{base_url}}` já está definida como `http://localhost:8000`.
+3. Utilize: Uma nova coleção chamada "API Teste Técnico Merchion" aparecerá. Ela já contém as requisições para "Registrar Novo Usuário" e "Login de Usuário" pré-configuradas. A variável `{{base_url}}` já está definida como `http://localhost:5252`.
 
 ## 📌 Endpoints da API
 
@@ -238,7 +238,7 @@ A segurança é tratada em todas as camadas, criando uma **defesa em profundidad
 
 ### 5. 🌐 Configuração de CORS para Aplicações SPA/Frontend
 
-Decisão: O arquivo `config/cors.php` foi configurado para permitir origens específicas (ex: `http://localhost:3000`) com `'supports_credentials' => true`.
+Decisão: O arquivo `config/cors.php` foi configurado para permitir origens específicas (ex: `http://localhost:3030`) com `'supports_credentials' => true`.
 
 Justificativa:
 Permitir o envio de **cookies** entre domínios é essencial para autenticação baseada em sessão.

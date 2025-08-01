@@ -10,12 +10,12 @@ export default defineNuxtConfig({
 
   nitro: {
     host: '0.0.0.0',
-    port: 3000
+    port: 3030
   },
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000/api'
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:5252/api'
     }
   },
 

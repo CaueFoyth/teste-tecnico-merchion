@@ -74,7 +74,7 @@ class Pedido {
 // ---------- Teste final ----------
 $pedido = new Pedido();
 
-$pedido->adicionarProduto(new ProdutoFisico("Notebook", 3000, 2.5));
+$pedido->adicionarProduto(new ProdutoFisico("Notebook", 3030, 2.5));
 $pedido->adicionarProduto(new ProdutoDigital("Curso PHP", 199.90, 1500));
 
 echo "Produtos no pedido:\n";
